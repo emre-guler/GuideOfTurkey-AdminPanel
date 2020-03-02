@@ -1,0 +1,78 @@
+@model IEnumerable<GuideOfTurkey_AdminPanel.Models.Photo>
+@{
+    ViewData["Title"] = "Sliders";
+}
+
+<div class="home">
+    <nav class="sidenav" id="sidenav">
+        <a href="#" id="close" class="close" onclick="closebarClicked()"></a>
+        <a href="/home">Ana Sayfa</a>
+        <a href="/users">Kullanıcılar</a>
+        <a href="/sliders">Slider</a>
+        <a href="/types">Mekan Tipleri</a>
+        <a href="/cities">Ülkeler/Şehirler/İlçeler</a>
+        <a href="/places">Yerler</a>
+        <a href="#" onclick="exitClick()" >Çıkış Yap</a>
+    </nav>
+    <div class="main" id="menubar">
+        <div class="menu-barContainer" onclick="menubarClicked()">
+            <div class="menu-bar"></div>
+            <div class="menu-bar"></div>
+            <div class="menu-bar"></div>
+        </div>
+        <div class="mainScreen">
+            <div style="width: 100%">
+                <h3>Ana Ekran Fotoğraflar</h3>
+                <hr style="height: 1px; color: #111;"/>
+                <div style="margin: 20px; display: flex; flex-wrap: wrap; max-height: 500px;overflow-y: scroll">
+                    @{int x = 0;}
+                    @foreach (var item in Model)
+                    {
+                        <div class="galleryContainer">
+                            <div class="photoContainer" onclick="photoClicked(@x,@item.ID)">
+                                @if(item.sliderState == true)
+                                {
+                                    <img src="/sliderPhotos/@item.photoUrl" id="image" class="image imageOpacity" />
+                                    <div class="tick tickOpacity">
+                                        <div style="color: white; font-size: -webkit-xxx-large;">&#10003;</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img src="/sliderPhotos/@item.photoUrl" id="image" class="image" />
+                                    <div class="tick">
+                                        <div style="color: white; font-size: -webkit-xxx-large;">&#10003;</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        {x = x + 1;}
+                    }
+                </div>
+                <div class="info">
+                        <p>Maksiumum 5 adet fotoğraf seçmeniz önerilir. Üzeri yeşil olan fotoğraflar seçilmiş olan fotoğraflardır.</p>
+                </div>
+                <div class="buttonContainer">
+                    <form method="POST" action="/sliders/addphoto" enctype="multipart/form-data">
+                        <label class="btn btn-info" onclick="savePhotos()">
+                            Kaydet
+                        </label>
+                        <label class="btn btn-success">
+                            Fotoğraf Seç <input type="file" hidden accept="image/png, image/jpeg" id="file" name="photo" />
+                        </label>
+                        <label class="btn btn-warning">
+                            Fotoğrafı Yükle <input type="submit" hidden>
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @foreach (var item in Model)
+    {
+        if(item.sliderState == true)
+        {
+            <input type="hidden" value="@item.ID" />
+        }
+    }
+</div>
